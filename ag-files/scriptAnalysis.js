@@ -290,6 +290,7 @@ function JSONblock(block) {
  * ]}]
  */
 function JSONcustomBlock(block) {
+    // console.log(bl)
     if ((block === undefined) || (block === null)) {
         // FIXME: throw new Error()
         throw "Custom block definition not found.";
@@ -423,6 +424,9 @@ function CBlockContainsInCustom(customBlockSpec, blockSpec1, blockSpec2, argArra
  * BLOCKSPEC should not be "true" or "false".
  */
 function scriptContainsBlock(script, blockSpec, argArray, softMatch) {
+
+    // console.log(script);
+    // console.log(blockSpec);
     if (Object.prototype.toString.call(script) !== '[object Array]') {
         return false;
     }
@@ -518,6 +522,7 @@ function spriteContainsBlock(blockSpec, spriteIndex, argArray, softMatch) {
     var JSONtarget;
     var hasFound = false;
     var scriptsOnScreen = getScripts(spriteIndex);
+    // console.log('scriptsOnScreen:', scriptsOnScreen);
     for (var i = 0; i < scriptsOnScreen.length; i++) {
         JSONtarget = JSONscript(scriptsOnScreen[i]);
         hasFound = scriptContainsBlock(JSONtarget, blockSpec, argArray, softMatch);

@@ -893,18 +893,18 @@
                 var outputLog = AGUpdate(world, id);
                 populateFeedback(outputLog);
             };
-            var doExecAndDisplayTests = function(event) {
-                event.stopPropagation();
-                console.log('PROPAGATION SHOULD STOP');
-                var numAttempts = setNumAttempts(id);
-                outputLog = new gradingLog(world, id, numAttempts);
-                outputLog.numAttempts += 1;
-                runAGTest(world, id, outputLog);
-                if (isEDX) {
-                    parent.document.getElementsByClassName('check-label')[0].click();
-                }
-                // var outputLog = AGStart(world, id);
-            }
+            // var doExecAndDisplayTests = function(event) {
+            //     event.stopPropagation();
+            //     console.log('PROPAGATION SHOULD STOP');
+            //     var numAttempts = setNumAttempts(id);
+            //     outputLog = new gradingLog(world, id, numAttempts);
+            //     outputLog.numAttempts += 1;
+            //     runAGTest(world, id, outputLog);
+            //     if (isEDX) {
+            //         parent.document.getElementsByClassName('check-label')[0].click();
+            //     }
+            //     // var outputLog = AGStart(world, id);
+            // }
             grade_button.addEventListener('click', doExecAndDisplayTests);
             var world_canvas = document.getElementById('world');
             world_canvas.addEventListener("mouseup", update_listener);

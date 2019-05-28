@@ -1,7 +1,6 @@
 /*
 * Makes AG status bar reflect the ungraded state of the outputLog.
 */
-
 // Store all the data about the feedback bar in one place that can be updated.
 var FeedbackDisplay = {
     // JQuery selectors. (Will need to update the rest of the file.)
@@ -29,7 +28,7 @@ var SELECT = FeedbackDisplay.selectors;
 // TODO: Pull out first 6 lines in a shared function
 function AG_bar_ungraded(outputLog) {
     var button_text = "Get Feedback ";
-    var button_elem = $('#autograding_button');
+    var button_elem = $('#savescript_button');
     var regex = new RegExp(button_text,"g");
     if (button_elem.html().match(regex) !== null) {
         return;
@@ -213,40 +212,24 @@ function initializeSnapAdditions(snapWorld, taskID) {
 
     ide = snapWorld.children[0];
 
-    // Load a starter file.
-    setTimeout(function() {
-        // If page has already been loaded, restore previously tested XML
-        // TODO: Separate this into its own function.
-        // Moved this into the timeout so that keys in session storage have time to be set from setstate in AGEDX before they are called
-        var prev_xml = sessionStorage.getItem(taskID + "_test_state");
-        var starter_xml = sessionStorage.getItem(taskID + "starter_file");
-        // console.log('starter_xml:')
-        if (prev_xml !== null) {
-            ide.openProjectString(prev_xml);
-        } else if (preReqTaskID !== null) {
-            if (preReqLog !== null && preReqLog.allCorrect) {
-                ide.openProjectString(sessionStorage.getItem(preReqID));
-            }
-        } else if (starter_xml) {
-            ide.openProjectString(starter_xml);
-            sessionStorage.removeItem(taskID + "starter_file");
-        } else if (starter_path) {
-            ide.showMessage('Loading the starter file.');
-            $.get(
-                starter_path,
 
-                function(data) {
-                    console.log("data: ", data);
-                    ide.openProjectString(data);
-                },
-                "text"
-            );
-        }
-    }, 500);
-
-    // if (showPrevFeedback) {
-    //     $("#feedback-button").click(function() { openResults(); });
     // }
+    setTimeout(function() {
+        // if (ppxml_path) {
+        //     console.log('find ppxmlpath');
+        //     console.log('ppxmlfilepath: ', ppxml_path);
+        //     $.get(
+        //         ppxml_path,
+        //         // gon.ppxml_file
+        //         function(data) {
+        //             ide.droppedText(data);
+        //             // ide.palette.hide();
+        //         }
+        //     ).done();
+        // }
+        // spriteToLeft(ide);
+    }, 5000);
+
 
     initializeButtonMouseListeners(snapWorld, taskID);
 
@@ -281,7 +264,7 @@ function initializeSnapAdditions(snapWorld, taskID) {
         // correctly the first time it is run, so populateFeedback has to be
         // called twice at the very beginning...
         if (showFeedback && sessionStorage.getItem(taskID + "_popupFeedback") !== null) {
-            populateFeedback(outputLog); 
+            populateFeedback(outputLog);
             populateFeedback(outputLog);
             // openResults();
             sessionStorage.removeItem(taskID + "_popupFeedback");
@@ -292,15 +275,14 @@ function initializeSnapAdditions(snapWorld, taskID) {
         // Sets each 'test content' piece to have a max-width, but WHY?
         var tip_tests = $(".data"),
             offsetWidth = $(".inner-titles");
-            if (offsetWidth.length) {
-                offsetWidth = offsetWidth[0].offsetWidth - 50 + "px";
-                for (var i = 0; i < tip_tests.length; i += 1) {
-                    $(tip_tests[i]).css('max-width', offsetWidth);
-                }
+        if (offsetWidth.length) {
+            offsetWidth = offsetWidth[0].offsetWidth - 50 + "px";
+            for (var i = 0; i < tip_tests.length; i += 1) {
+                $(tip_tests[i]).css('max-width', offsetWidth);
+            }
         }
     }, 1500);
 }
-
 // Call the test suite when this element is clicked.
 // TODO: Rename this and cleanup outputLog
 var update_listener = function() {
