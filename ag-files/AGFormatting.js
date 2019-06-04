@@ -764,6 +764,8 @@ function populateFeedback(feedbackLog, allFeedback, chunknum, tipnum) {
 
     var tipText;
     if (numtips === 0) {
+        // window.alert('Succesfully Updated');
+        // window.location.href='google.com';
         tipText = 'Awesome work! You passed all tests.';
     } else {
         tipText = "We have {0} for you! ".format(
