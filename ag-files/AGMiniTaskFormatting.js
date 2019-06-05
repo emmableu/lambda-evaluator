@@ -349,7 +349,7 @@ function appendElement(elem, text, elemClass, selector) {
 
 function createCorrectIncorrectGrouping(sectName) {
     var text_content = {
-            correct: 'Nice work! Here are passing tests: wwr',
+            correct: 'Nice work! Here are passing tests:',
             incorrect: 'Here are some test cases you should review:'
         },
         div = $('<div>')
