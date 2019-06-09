@@ -109,11 +109,17 @@ function createBlockIamges(blockSpec, hintHTML) {
     TODO: Rename these functions
 */
 function openPopup() {
-    $('#overlay').removeClass("hidden");
+    console.log("open  popup");
+    $('#ag-output').removeClass("hidden");
+    var output = $('#ag-output').attr("class");
+    console.log("ag-output class: ", output);
 }
 
 function closePopup() {
-    $('#overlay').addClass("hidden");
+    console.log("please close this!");
+    $('#ag-output').addClass("hidden");
+    var output = $('#ag-output').classList;
+    console.log("ag-output class: ", output);
 }
 
 // TODO: Make this simply `toggleResults`
@@ -176,11 +182,12 @@ function initializeButtonMouseListeners(snapWorld, taskID) {
     //     closeInitialHelp();
     // });
     $('#overlay').click(function(e) {
+        console.log('AGMiniTaskFormatting.overlay.close');
         closePopup();
     });
     $("#ag-output").click(function(e) {
         if (!(document.getElementById('ag-results').contains(e.target)) && e.target.className.indexOf("regrade") === -1) {
-            closeResults();
+            // closeResults();
         }
     });
 
@@ -310,6 +317,7 @@ var update_listener = function() {
 
 // Called from "Get Feedback" Button -- begins test execution
 function doExecAndDisplayTests(event) {
+
     event.stopPropagation();
     console.log('doMiniExectAnd');
     var numAttempts = setNumAttempts(id);
@@ -328,6 +336,14 @@ function doExecAndDisplayTests(event) {
         }
     }
     sessionStorage.setItem(id + "_popupFeedback", '');
+    openPopup();
+}
+
+function doExecAndDisplayQuizzes(event){
+    event.stopPropagation();
+    console.log('doExecAndDisplayQuizzes');
+    populateQuiz();
+    openPopup();
 }
 
 /*
