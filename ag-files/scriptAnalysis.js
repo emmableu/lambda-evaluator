@@ -584,7 +584,7 @@ function CBlockContains(block1Spec, block2Spec, script, argArray1, argArray2, so
     var morph1, type1, CblockSpecs;
     // TODO: Replace this with one list.
     // TODO: Write a function to find with inputs.
-    CblockSpecs = ["repeat %n %c", "warp %c", "forever %c", "for %upvar = %n to %n %cs"];
+    CblockSpecs = ["repeat %n %loop","repeat %n %c", "warp %c", "forever %c", "for %upvar = %n to %n %cs"];
     CblockSpecs = CblockSpecs.concat(["repeat until %b %c", "if %b %c", "if %b %c else %c"]);
     CblockSpecs = CblockSpecs.concat(["for each %upvar of %l %cs"]);
 
@@ -651,7 +651,7 @@ function simpleCBlockContains(script, blockSpec1, block2Name, argArray1, argArra
         }
         // TODO: Extract this
         var nicknameDict = {
-            "repeat" : "repeat %n %c",
+            "repeat" : "repeat %n %loop",
             "warp" : "warp %c",
             "forever" : "forever %c",
             "for" : "for %upvar = %n to %n %cs",
