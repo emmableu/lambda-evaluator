@@ -110,6 +110,7 @@ function createBlockIamges(blockSpec, hintHTML) {
 */
 function openPopup() {
     $('#overlay').removeClass("hidden");
+
 }
 
 function closePopup() {
@@ -121,7 +122,7 @@ function openResults() {
     // TODO: There should be a safer way of getting this.
     var numTips = $('.tips-msg .badge').text();
     if (numTips == "0") {
-        alert('No tips yet! Try clicking "Get Feedback".');
+        // alert('No tips yet! Try clicking "Get Feedback".');
     }
     $('#ag-output').show();
 }
