@@ -28,7 +28,7 @@ var SELECT = FeedbackDisplay.selectors;
 
 // TODO: Pull out first 6 lines in a shared function
 function AG_bar_ungraded(outputLog) {
-    var button_text = "Get Feedback ";
+    var button_text = "Check My Work";
     var button_elem = $('#checkmywork');
     var regex = new RegExp(button_text,"g");
     if (button_elem.html().match(regex) !== null) {
@@ -47,7 +47,7 @@ function AG_bar_ungraded(outputLog) {
  * only occurs when all tests on the outputLog have passed.
  */
 function AG_bar_graded(outputLog) {
-    var button_text = "Get Feedback";
+    var button_text = "Check My Work";
     var button_elem = $(SELECT.ag_button);
     var regex = new RegExp(button_text,"g");
     if (button_elem.html().match(regex) !== null) {
@@ -66,7 +66,7 @@ function AG_bar_graded(outputLog) {
  * This is called when any test on the outputLog fails.
  */
 function AG_bar_semigraded(outputLog) {
-    var button_text = "Get Feedback";
+    var button_text = "Check My Work";
     var button_elem = $(SELECT.ag_button);
     var regex = new RegExp("FEEDBACK","g");
     var num_errors = outputLog.testCount - outputLog.numCorrect;
@@ -117,6 +117,12 @@ function openPopup() {
 
 function closePopup() {
     console.log("please close this!");
+    try {
+        divTest;
+        delete divTest;
+    }
+    catch(err) {
+    }
     $('#ag-output').addClass("hidden");
     var output = $('#ag-output').classList;
     console.log("ag-output class: ", output);
@@ -312,7 +318,13 @@ function initializeSnapAdditions(snapWorld, taskID) {
 // TODO: Rename this and cleanup outputLog
 var update_listener = function() {
     // TODO: Why is `var` here?
-    var outputLog = AGUpdate(world, id);
+    try {
+        var outputLog = AGUpdate(world, id);
+    }
+    catch(err) {
+        var outputLog = [];
+    }
+
 };
 
 // Called from "Get Feedback" Button -- begins test execution
