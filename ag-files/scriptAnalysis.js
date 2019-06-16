@@ -206,56 +206,67 @@ function JSONblock(block) {
         throw "block is undefined";
     }
     var blockArgs = [];
+    var blockColor = [];
     var morph;
+    if(block.blockSpec === 'set pen color to %clr'){
+        var blockColor = (block.children[4].color);
+    }
+
     for (var i = 0; i < block.children.length; i++) {
         morph = block.children[i];
-        if (morph.selector === "reportGetVar") {
-            blockArgs.push(morph.blockSpec);
-        } else if ((morph.__proto__.constructor.name === "RingReporterSlotMorph")
-                    || (morph.__proto__.constructor.name === "RingCommandSlotMorph")) {
-            if (morph.children[0].children.length === 0) {
-                blockArgs.push("");
-            } else {
-                blockArgs.push(JSONblock(morph.children[0]));
-            }
-        } else if ((morph.hasOwnProperty("type")) && (morph.type === "list")) {
-            blockArgs.push("");
-         } else if (morph.__proto__.constructor.name === "MultiArgMorph") {
-             for (var j = 1 ; j < morph.children.length - 1; j++) {
-                 if (morph.children[j].__proto__.constructor.name === "InputSlotMorph") {
-                     blockArgs.push(morph.children[j].children[0].text);
-                } else if (morph.children[j].__proto__.constructor.name === "TemplateSlotMorph") {
-                    if (reporterHasNoInputs(morph.children[j].children[0])) {
-                        blockArgs.push(morph.children[j].children[0].blockSpec);
-                    } else {
-                        blockArgs.push(JSONblock(morph.children[j].children[0]));
-                    }
-                } else if (morph.children[j] instanceof ReporterBlockMorph) {
-                    blockArgs.push(JSONblock(morph.children[j]));
-                }
-             }
-         } else if (morph.selector === "reportTrue" || morph.selector === "reportFalse") {
-            blockArgs.push(morph.blockSpec);
-        } else if (morph.__proto__.constructor.name === "InputSlotMorph") {
-            blockArgs.push(morph.children[0].text);
-        } else if (morph instanceof CSlotMorph) {
-            if (morph.children.length === 0) {
-                blockArgs.push([]);
-            } else {
-                blockArgs.push(JSONscript(morph.children[0]));
-            }
-        } else if (morph instanceof ReporterBlockMorph) {
-            if (reporterHasNoInputs(morph)) {
+
+
+            if (morph.selector === "reportGetVar") {
                 blockArgs.push(morph.blockSpec);
-            } else {
-                blockArgs.push(JSONblock(morph));
+            } else if ((morph.__proto__.constructor.name === "RingReporterSlotMorph")
+                || (morph.__proto__.constructor.name === "RingCommandSlotMorph")) {
+                if (morph.children[0].children.length === 0) {
+                    blockArgs.push("");
+                } else {
+                    blockArgs.push(JSONblock(morph.children[0]));
+                }
+            } else if ((morph.hasOwnProperty("type")) && (morph.type === "list")) {
+                blockArgs.push("");
+            } else if (morph.__proto__.constructor.name === "MultiArgMorph") {
+                for (var j = 1 ; j < morph.children.length - 1; j++) {
+                    if (morph.children[j].__proto__.constructor.name === "InputSlotMorph") {
+                        blockArgs.push(morph.children[j].children[0].text);
+                    } else if (morph.children[j].__proto__.constructor.name === "TemplateSlotMorph") {
+                        if (reporterHasNoInputs(morph.children[j].children[0])) {
+                            blockArgs.push(morph.children[j].children[0].blockSpec);
+                        } else {
+                            blockArgs.push(JSONblock(morph.children[j].children[0]));
+                        }
+                    } else if (morph.children[j] instanceof ReporterBlockMorph) {
+                        blockArgs.push(JSONblock(morph.children[j]));
+                    }
+                }
+            } else if (morph.selector === "reportTrue" || morph.selector === "reportFalse") {
+                blockArgs.push(morph.blockSpec);
+            } else if (morph.__proto__.constructor.name === "InputSlotMorph") {
+                blockArgs.push(morph.children[0].text);
+            } else if (morph instanceof CSlotMorph) {
+                if (morph.children.length === 0) {
+                    blockArgs.push([]);
+                } else {
+                    blockArgs.push(JSONscript(morph.children[0]));
+                }
+            } else if (morph instanceof ReporterBlockMorph) {
+                if (reporterHasNoInputs(morph)) {
+                    blockArgs.push(morph.blockSpec);
+                } else {
+                    blockArgs.push(JSONblock(morph));
+                }
             }
-        }
+            // colors.push([]);
+
+
     }
 
     return {
         blockSp: block.blockSpec,
-        inputs: blockArgs
+        inputs: blockArgs,
+        blockColor: blockColor
     };
 }
 

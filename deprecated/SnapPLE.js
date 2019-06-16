@@ -1591,7 +1591,7 @@ function JSONscript(blocks) {
     var currJSONblock = JSONblock(currBlock);
     var childrenList = currBlock.children;
     var lastChild = childrenList[childrenList.length - 1];
-    scriptArr.push(currJSONblock);
+    scriptArr.push(currJSONblock);json
     while (lastChild instanceof CommandBlockMorph) {
         currBlock = lastChild;
         currJSONblock = JSONblock(currBlock);
