@@ -1,3 +1,5 @@
+console.log('scriptminit staslkana analysis');
+
 function NumberCBlockContainsInSprite(block1Spec, block2Spec,block2Spec_num, spriteIndex, argArray1, argArray2, softMatch) {
     // Populate optional parameters
     if (spriteIndex === undefined) {
@@ -284,17 +286,338 @@ function SeriesOfBlockSpecInRepeat(spec_array, repeat_num) {
     // return result;
 }
 
-// function checkBelong(var l, var a) {
-//     for (var i = 0; i < l.length(); i++) {
-//         if (l[i] === a[0]) {
-//             checkBelong(l.subarray(i+1), a.subarray(1));
-//         }
-//         if (a.length() === 0) {
-//             return true;
-//         }
-//         if (l.length() === 0) {
-//             return false;
-//         }
-//         return false;
-//     }
-// }
+
+function checkBelongInSprite(block_array, spec_array) {
+    if (spec_array.length === 0) {
+        return true;
+    }
+    if (block_array.length === 0) {
+        return false;
+    }
+
+    if (blockSpecMatch(block_array[0].blockSpec, spec_array[0])) {
+        return checkBelongInSprite(block_array.slice(1), spec_array.slice(1));
+    }
+    else{
+        return checkBelongInSprite(block_array.slice(1), spec_array);
+    }
+    // }
+
+
+}
+
+
+
+function SeriesOfBlockSpecInSprite(spec_array){
+
+    scriptsOnScreen = getScripts(0);
+    script = scriptsOnScreen[0];
+
+    var blocksequence = script.blockSequence();
+    // blocksequence = JSONscript(blocksequence);
+
+    return checkBelongInSprite(blocksequence, spec_array);
+}
+
+function SeriesOfBlockSpecInOuterRepeat(spec_array){
+    scriptsOnScreen = getScripts(0);
+    script = scriptsOnScreen[0];
+    var script = JSONscript(script);
+
+    var subscript = {};
+    for (var i = 0; i < script.length; i++) {
+        morph1 = script[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "repeat %n %loop")) {
+
+                // if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
+                console.log("count === block2specnum");
+                var subscript = morph1.inputs[morph1.inputs.length - 1];
+                // }
+                break;
+
+        }
+
+    }
+    if (subscript ==={}){
+        return false;
+    }
+    return checkBelong(subscript, spec_array);
+}
+
+
+function SeriesOfBlockSpecInInnerRepeat(spec_array){
+    scriptsOnScreen = getScripts(0);
+    script = scriptsOnScreen[0];
+    var script = JSONscript(script);
+
+    var subscript = {};
+    for (var i = 0; i < script.length; i++) {
+        morph1 = script[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "repeat %n %loop")) {
+
+            // if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
+            console.log("count === block2specnum");
+            var subscript = morph1.inputs[morph1.inputs.length - 1];
+            // }
+            break;
+
+        }
+
+    }
+    if (subscript ==={}){
+        return false;
+    }
+
+    var subsubscript = {};
+
+    for (var i = 0; i < subscript.length; i++) {
+        morph1 = subscript[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "repeat %n %loop")) {
+
+            // if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
+            var subsubscript = morph1.inputs[morph1.inputs.length - 1];
+            // }
+            break;
+
+        }
+
+    }
+
+    return checkBelong(subsubscript, spec_array);
+}
+
+
+
+//this checks if "down arrow key is pressed" is in an if condition,
+// "ifblockinput" as "downarrow"
+function IfExistsInInnerForever(ifblockinput){
+    scriptsOnScreen = getScripts(0);
+    script = scriptsOnScreen[0];
+    var script = JSONscript(script);
+
+    var subscript = {};
+    for (var i = 0; i < script.length; i++) {
+        morph1 = script[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "forever %loop")) {
+            console.log("count === block2specnum");
+            var subscript = morph1.inputs[morph1.inputs.length - 1];
+            // }
+            break;
+        }
+
+    }
+    if (subscript ==={}){
+        return false;
+    }
+
+    var subsubscript = {};
+
+    for (var i = 0; i < subscript.length; i++) {
+        morph1 = subscript[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "if %b %c")) {
+            if (blockSpecMatch(morph1.inputs[0].blockSp, "key %key pressed?")){
+
+                if(blockSpecMatch(morph1.inputs[0].inputs[0], ifblockinput)){
+                    return true;
+                }
+            }
+
+
+        }
+
+    }
+
+}
+
+
+//this checks if "down arrow key is pressed" is in an if condition, and the first do is:
+//ifblockdo
+// "ifblockinput" as "downarrow"
+
+
+function IfDoExistsInInnerForever(ifblockinput, ifblockdo){
+    scriptsOnScreen = getScripts(0);
+    script = scriptsOnScreen[0];
+    var script = JSONscript(script);
+
+    var subscript = {};
+    for (var i = 0; i < script.length; i++) {
+        morph1 = script[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "forever %loop")) {
+            console.log("count === block2specnum");
+            var subscript = morph1.inputs[morph1.inputs.length - 1];
+            // }
+            break;
+        }
+
+    }
+    if (subscript ==={}){
+        return false;
+    }
+
+    var subsubscript = {};
+
+    for (var i = 0; i < subscript.length; i++) {
+        morph1 = subscript[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "if %b %c")) {
+            if (blockSpecMatch(morph1.inputs[0].blockSp, "key %key pressed?")){
+                if(blockSpecMatch(morph1.inputs[0].inputs[0], ifblockinput)){
+
+                    if(blockSpecMatch(morph1.inputs[1][0].blockSp, ifblockdo)) {
+                        return true;
+                    }
+                }
+            }
+
+
+        }
+
+    }
+
+}
+
+function IfDoInputExistsInInnerForever(ifblockinput, ifblockdo, ifblockdoinput){
+    scriptsOnScreen = getScripts(0);
+    script = scriptsOnScreen[0];
+    var script = JSONscript(script);
+
+    var subscript = {};
+    for (var i = 0; i < script.length; i++) {
+        morph1 = script[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "forever %loop")) {
+            console.log("count === block2specnum");
+            var subscript = morph1.inputs[morph1.inputs.length - 1];
+            // }
+            break;
+        }
+
+    }
+    if (subscript ==={}){
+        return false;
+    }
+
+    var subsubscript = {};
+
+    for (var i = 0; i < subscript.length; i++) {
+        morph1 = subscript[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "if %b %c")) {
+            if (blockSpecMatch(morph1.inputs[0].blockSp, "key %key pressed?")){
+                if(blockSpecMatch(morph1.inputs[0].inputs[0], ifblockinput)){
+
+                    if(blockSpecMatch(morph1.inputs[1][0].blockSp, ifblockdo)) {
+                        if(morph1.inputs[1][0].inputs[0] === ifblockdoinput) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+    }
+
+}
+
+
+function IfTouchingDoExistsInInnerForever(ifblockdo){
+    scriptsOnScreen = getScripts(0);
+    script = scriptsOnScreen[0];
+    var script = JSONscript(script);
+
+    var subscript = {};
+    for (var i = 0; i < script.length; i++) {
+        morph1 = script[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "forever %loop")) {
+            console.log("count === block2specnum");
+            var subscript = morph1.inputs[morph1.inputs.length - 1];
+            // }
+            break;
+        }
+
+    }
+    if (subscript ==={}){
+        return false;
+    }
+
+    var subsubscript = {};
+
+    for (var i = 0; i < subscript.length; i++) {
+        morph1 = subscript[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "if %b %c")) {
+            if (blockSpecMatch(morph1.inputs[0].blockSp, "touching %col ?")){
+                    if(blockSpecMatch(morph1.inputs[1][0].blockSp, ifblockdo)) {
+                        return true;
+                    }
+                }
+            }
+
+
+
+
+    }
+
+}
+
+
+function subScript(parentScript, element, iforelse){
+    if (iforelse === undefined){
+        iforelse = null;
+    }
+    for (var i = 0; i < parentScript.length; i++) {
+        morph1 = parentScript[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, element)) {
+            if (element === 'if %b %c else %c') {
+                if (iforelse === 'if') {
+                    var subscript = morph1.inputs[morph1.inputs.length - 2];
+                }
+
+                else if (iforelse === 'else') {
+                    var subscript = morph1.inputs[morph1.inputs.length - 1];
+                }
+            }
+            else {
+                var subscript = morph1.inputs[morph1.inputs.length - 1];
+            }
+            return subscript;
+        }
+
+    }
+    return null;
+}
