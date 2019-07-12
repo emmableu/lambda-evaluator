@@ -260,6 +260,8 @@ span {
    left:40%;
    right:90%;
    background-color: #231f20;
+    border-style: solid;
+    border-width: thick;
    /*left: 50%;
    top: 50%;
    margin-left: -150px; /* Half of width */

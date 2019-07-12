@@ -31,9 +31,9 @@ function AG_bar_ungraded(outputLog) {
     var button_text = "Check My Work";
     var button_elem = $('#checkmywork');
     var regex = new RegExp(button_text,"g");
-    if (button_elem.html().match(regex) !== null) {
-        return;
-    }
+    // if (button_elem.html().match(regex) !== null) {
+    //     return;
+    // }
 
     if (sessionStorage.getItem(outputLog.taskID + "_test_log")) {
         // TODO: Set the number of tips
@@ -109,14 +109,14 @@ function createBlockIamges(blockSpec, hintHTML) {
     TODO: Rename these functions
 */
 function openPopup() {
-    console.log("open  popup");
+    // // console.log("open  popup");
     $('#ag-output').removeClass("hidden");
     var output = $('#ag-output').attr("class");
-    console.log("ag-output class: ", output);
+    // // console.log("ag-output class: ", output);
 }
 
 function closePopup() {
-    console.log("please close this!");
+    // // console.log("please close this!");
     try {
         divTest;
         delete divTest;
@@ -125,7 +125,7 @@ function closePopup() {
     }
     $('#ag-output').addClass("hidden");
     var output = $('#ag-output').classList;
-    console.log("ag-output class: ", output);
+    // // console.log("ag-output class: ", output);
 }
 
 // TODO: Make this simply `toggleResults`
@@ -188,7 +188,7 @@ function initializeButtonMouseListeners(snapWorld, taskID) {
     //     closeInitialHelp();
     // });
     $('#overlay').click(function(e) {
-        console.log('AGMiniTaskFormatting.overlay.close');
+        // // console.log('AGMiniTaskFormatting.overlay.close');
         closePopup();
     });
     $("#ag-output").click(function(e) {
@@ -233,7 +233,7 @@ function initializeSnapAdditions(snapWorld, taskID) {
         // Moved this into the timeout so that keys in session storage have time to be set from setstate in AGEDX before they are called
         var prev_xml = sessionStorage.getItem(taskID + "_test_state");
         var starter_xml = sessionStorage.getItem(taskID + "starter_file");
-        // console.log('starter_xml:')
+        // // // console.log('starter_xml:')
         if (prev_xml !== null) {
             ide.openProjectString(prev_xml);
         } else if (preReqTaskID !== null) {
@@ -249,7 +249,7 @@ function initializeSnapAdditions(snapWorld, taskID) {
                 starter_path,
 
                 function(data) {
-                    console.log("data: ", data);
+                    // // console.log("data: ", data);
                     ide.openProjectString(data);
                 },
                 "text"
@@ -294,8 +294,8 @@ function initializeSnapAdditions(snapWorld, taskID) {
         // correctly the first time it is run, so populateFeedback has to be
         // called twice at the very beginning...
         if (showFeedback && sessionStorage.getItem(taskID + "_popupFeedback") !== null) {
-            populateFeedback(outputLog);
-            populateFeedback(outputLog);
+            // populateFeedback(outputLog);
+            // populateFeedback(outputLog);
             // openResults();
             sessionStorage.removeItem(taskID + "_popupFeedback");
         }
@@ -329,14 +329,15 @@ var update_listener = function() {
 
 // Called from "Get Feedback" Button -- begins test execution
 function doExecAndDisplayTests(event) {
-
+    // alert('doexecanddisplay tests');
+    console.log('------------------------doexecanddisplaytests');
     event.stopPropagation();
-    console.log('doMiniExectAnd');
+    // // // console.log('doMiniExectAnd');
     var numAttempts = setNumAttempts(id);
     outputLog = new FeedbackLog(world, id, numAttempts);
     outputLog.numAttempts += 1;
     runAGTest(world, id, outputLog);
-    console.log('runAGTEST');
+    // // console.log('runAGTEST');
 
     // TODO: extract and document this...
     var tip_tests = document.getElementsByClassName("data"),
@@ -356,6 +357,16 @@ function doExecAndDisplayQuizzes(event){
     console.log('doExecAndDisplayQuizzes');
     populateQuiz();
     openPopup();
+}
+
+function doExecAndDisplayLittleTests(){
+    // alert('doexecanddisplay little tests');
+    event.stopPropagation();
+    // // // console.log('doMiniExectAnd');
+    var numAttempts = setNumAttempts(id);
+    outputLog = new FeedbackLog(world, id, numAttempts);
+    outputLog.numAttempts += 1;
+    runLittleAGTest(world, id, outputLog);
 }
 
 /*

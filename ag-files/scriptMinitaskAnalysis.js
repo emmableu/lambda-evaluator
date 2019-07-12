@@ -1,4 +1,4 @@
-console.log('scriptminit staslkana analysis');
+// // console.log('scriptminit staslkana analysis');
 
 function NumberCBlockContainsInSprite(block1Spec, block2Spec,block2Spec_num, spriteIndex, argArray1, argArray2, softMatch) {
     // Populate optional parameters
@@ -26,7 +26,7 @@ function NumberCBlockContainsInSprite(block1Spec, block2Spec,block2Spec_num, spr
 }
 
 function NumberCBlockContains(block1Spec, block2Spec,block2Spec_num, script, argArray1, argArray2, softMatch) {
-    console.log('scriptminitaskanalysis');
+    // console.log('scriptminitaskanalysis');
     // TODO: Fix this condition
     if (Object.prototype.toString.call(script) !== '[object Array]') {
         return false;
@@ -66,16 +66,16 @@ function NumberCBlockContains(block1Spec, block2Spec,block2Spec_num, script, arg
         if ((type1 === "string")) {
             continue;
         } else if (Object.prototype.toString.call(morph1) === '[object Array]') {
-            console.log("(Object.prototype.toString.call(morph1) === '[object Array]')");
+            // console.log("(Object.prototype.toString.call(morph1) === '[object Array]')");
             if (CBlockContains(block1Spec, block2Spec, morph1, argArray1, argArray2, softMatch)) {
                 return true;
             }
         } else if (blockSpecMatch(morph1.blockSp, block2Spec) && checkArgArrays(argArray2, morph1.inputs)) {
             count += 1;
-            console.log("count: ", count);
+            // console.log("count: ", count);
             if(count === block2Spec_num) {
                 if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
-                    console.log("count === block2specnum");
+                    // console.log("count === block2specnum");
                     return true;
                 }
                 break;
@@ -124,10 +124,10 @@ function blockPrecedesInRepeat(block1, block2, repeat_num, script, index, seen1)
             continue;
         }  else if (blockSpecMatch(morph1.blockSp, "repeat %n %loop")) {
             count += 1;
-            console.log("count: ", count);
+            // console.log("count: ", count);
             if(count === repeat_num) {
                 // if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
-                console.log("count === block2specnum");
+                // console.log("count === block2specnum");
                 var subscript = morph1.inputs[morph1.inputs.length - 1];
                 // }
                 break;
@@ -154,14 +154,14 @@ function blockPrecedesInRepeat(block1, block2, repeat_num, script, index, seen1)
             }
         } else {
             if (blockSpecMatch(submorph1.blockSp, block2)) {
-                console.log("blockSpecMatch(submorph1.blockSp, block2)",  block2);
+                // console.log("blockSpecMatch(submorph1.blockSp, block2)",  block2);
                 if (!seen1) {
                     return false;
                 }
                 return true;
             }
             if (blockSpecMatch(submorph1.blockSp, block1)) {
-                console.log("blockSpecMatch(submorph1.blockSp, block1)",  block1);
+                // console.log("blockSpecMatch(submorph1.blockSp, block1)",  block1);
                 seen1 = true;
             }
             // if (blockPrecedesInRepeat(block1, block2, repeat_num, submorph1.inputs, seen1)) {
@@ -190,10 +190,10 @@ function occurancesOfBlockSpecInRepeat(blockSpec, repeat_num) {
             continue;
         }  else if (blockSpecMatch(morph1.blockSp, "repeat %n %loop")) {
             count += 1;
-            console.log("count: ", count);
+            // console.log("count: ", count);
             if(count === repeat_num) {
                 // if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
-                console.log("count === block2specnum");
+                // console.log("count === block2specnum");
                 var subscript = morph1.inputs[morph1.inputs.length - 1];
                 // }
                 break;
@@ -261,10 +261,10 @@ function SeriesOfBlockSpecInRepeat(spec_array, repeat_num) {
             continue;
         }  else if (blockSpecMatch(morph1.blockSp, "repeat %n %loop")) {
             count += 1;
-            console.log("count: ", count);
+            // console.log("count: ", count);
             if(count === repeat_num) {
                 // if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
-                console.log("count === block2specnum");
+                // console.log("count === block2specnum");
                 var subscript = morph1.inputs[morph1.inputs.length - 1];
                 // }
                 break;
@@ -285,6 +285,153 @@ function SeriesOfBlockSpecInRepeat(spec_array, repeat_num) {
     };
     // return result;
 }
+
+
+
+
+function IfTouchingSeries(touchingcolorseries, repeat_num) {
+
+
+
+    scriptsOnScreen = getScripts(0);
+    script = scriptsOnScreen[0];
+    var script = JSONscript(script);
+
+    var count = 0;
+    var subscript = {};
+    for (var i = 0; i < script.length; i++) {
+        morph1 = script[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "if %b %c")) {
+            count += 1;
+            // console.log("count: ", count);
+            if(count === repeat_num) {
+                // if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
+                // console.log("count === block2specnum");
+                var subscript = morph1.inputs[0];
+                // }
+                break;
+            }
+
+        }
+
+    }
+    if (subscript ==={}){
+        return false;
+    }
+
+    if(subscript.blockColor.r === touchingcolorseries[0] &&
+        subscript.blockColor.g === touchingcolorseries[1] &&
+        subscript.blockColor.b === touchingcolorseries[2]){
+        return true;
+    }
+    // return result;
+}
+
+
+
+
+function SeriesOfBlockSpecInIfTouching(spec_array, touchingcolorseries){
+
+    scriptsOnScreen = getScripts(0);
+    script = scriptsOnScreen[0];
+    var script = JSONscript(script);
+
+    var count = 0;
+    var subscript = {};
+    for (var i = 0; i < script.length; i++) {
+        morph1 = script[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "if %b %c")) {
+            var if_subscript = morph1.inputs[0];
+
+            if (if_subscript ==={}){
+                continue;
+            }
+
+            else if(if_subscript.blockColor.r === touchingcolorseries[0] &&
+                if_subscript.blockColor.g === touchingcolorseries[1] &&
+                if_subscript.blockColor.b === touchingcolorseries[2]){
+                subscript = morph1.inputs[morph1.inputs.length - 1];
+                // console.log('subscript: ', subscript);
+                // alert(subscript);
+                break;
+            }
+
+        }
+
+    }
+    if (subscript ==={}){
+        return false;
+    }
+
+    if(checkBelong(subscript, spec_array) === true){
+        return true;
+    }
+    else{
+        return false;
+    };
+}
+
+
+function SeriesOfBlockSpecInIf(spec_array, repeat_num) {
+
+
+
+    scriptsOnScreen = getScripts(0);
+    script = scriptsOnScreen[0];
+    var script = JSONscript(script);
+
+    var count = 0;
+    var subscript = {};
+    for (var i = 0; i < script.length; i++) {
+        morph1 = script[i];
+        type1 = typeof(morph1);
+        if ((type1 === "string")) {
+            continue;
+        }  else if (blockSpecMatch(morph1.blockSp, "if %b %c")) {
+            count += 1;
+            // console.log("count: ", count);
+            if(count === repeat_num) {
+                // if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
+                // console.log("count === block2specnum");
+                var subscript = morph1.inputs[morph1.inputs.length - 1];
+                // }
+                break;
+            }
+
+        }
+
+    }
+    if (subscript ==={}){
+        return false;
+    }
+
+    if(checkBelong(subscript, spec_array) === true){
+        return true;
+    }
+    else{
+        return false;
+    };
+    // return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function checkBelongInSprite(block_array, spec_array) {
@@ -333,7 +480,7 @@ function SeriesOfBlockSpecInOuterRepeat(spec_array){
         }  else if (blockSpecMatch(morph1.blockSp, "repeat %n %loop")) {
 
                 // if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
-                console.log("count === block2specnum");
+                // console.log("count === block2specnum");
                 var subscript = morph1.inputs[morph1.inputs.length - 1];
                 // }
                 break;
@@ -362,7 +509,7 @@ function SeriesOfBlockSpecInInnerRepeat(spec_array){
         }  else if (blockSpecMatch(morph1.blockSp, "repeat %n %loop")) {
 
             // if (scriptContainsBlock(morph1.inputs[morph1.inputs.length - 1], block1Spec, argArray1, softMatch)) {
-            console.log("count === block2specnum");
+            // console.log("count === block2specnum");
             var subscript = morph1.inputs[morph1.inputs.length - 1];
             // }
             break;
@@ -399,6 +546,8 @@ function SeriesOfBlockSpecInInnerRepeat(spec_array){
 
 //this checks if "down arrow key is pressed" is in an if condition,
 // "ifblockinput" as "downarrow"
+
+
 function IfExistsInInnerForever(ifblockinput){
     scriptsOnScreen = getScripts(0);
     script = scriptsOnScreen[0];
@@ -411,7 +560,7 @@ function IfExistsInInnerForever(ifblockinput){
         if ((type1 === "string")) {
             continue;
         }  else if (blockSpecMatch(morph1.blockSp, "forever %loop")) {
-            console.log("count === block2specnum");
+            // console.log("count === block2specnum");
             var subscript = morph1.inputs[morph1.inputs.length - 1];
             // }
             break;
@@ -462,7 +611,7 @@ function IfDoExistsInInnerForever(ifblockinput, ifblockdo){
         if ((type1 === "string")) {
             continue;
         }  else if (blockSpecMatch(morph1.blockSp, "forever %loop")) {
-            console.log("count === block2specnum");
+            // console.log("count === block2specnum");
             var subscript = morph1.inputs[morph1.inputs.length - 1];
             // }
             break;
@@ -509,7 +658,7 @@ function IfDoInputExistsInInnerForever(ifblockinput, ifblockdo, ifblockdoinput){
         if ((type1 === "string")) {
             continue;
         }  else if (blockSpecMatch(morph1.blockSp, "forever %loop")) {
-            console.log("count === block2specnum");
+            // console.log("count === block2specnum");
             var subscript = morph1.inputs[morph1.inputs.length - 1];
             // }
             break;
@@ -559,7 +708,7 @@ function IfTouchingDoExistsInInnerForever(ifblockdo){
         if ((type1 === "string")) {
             continue;
         }  else if (blockSpecMatch(morph1.blockSp, "forever %loop")) {
-            console.log("count === block2specnum");
+            // console.log("count === block2specnum");
             var subscript = morph1.inputs[morph1.inputs.length - 1];
             // }
             break;

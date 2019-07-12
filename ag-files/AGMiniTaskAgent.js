@@ -39,7 +39,24 @@ function runAGTest(snapWorld, taskID, outputLog) {
         test_log.scoreLog();
     }
 }
+function runLittleAGTest(snapWorld, taskID, outputLog) {
+    //console.log('runLittleTest');
+    // Create a new gradingLog if none is specified.
+    var numAttempts = setNumAttempts(taskID);
+    outputLog = outputLog || new FeedbackLog(snapWorld, taskID, numAttempts);
+    // Populate, run, and evaluate the tests specified in AGTest()
+    // These tests specified by the Course Designer.
 
+    // TODO: Cleanup and document this API
+    var test_log = AGTest(outputLog);
+    // //console.log('after AGTEST');
+    var TEST = test_log.runSnapTests();
+    //console.log('after runsnaptests');
+    if (!TEST) {
+        test_log.scoreLittleLog();
+        // //console.log('after scoreLog');
+    }
+}
 /* After loading the XML, check if the current XML is a known
  * state, restore the gradingLog if it is.
  * @return {gradingLog}
@@ -116,7 +133,7 @@ function AGUpdate(snapWorld, taskID) {
     // Retrieve previous grade logs (if in sessionStorage). As {String}s
     
     if (!prev_xml || !curr_xml) {
-        console.log('AGUpdate: Either prev_xml or curr_xml do not exist.');
+        // //console.log('AGUpdate: Either prev_xml or curr_xml do not exist.');
     }
     // menu bar grays out options that are not available 
     // (ex. current state is same as best attempt) and restores the button state
@@ -134,7 +151,7 @@ function AGUpdate(snapWorld, taskID) {
         
         // TODO: Write a good comment
         // TODO: Give gradeLog ability to recover log data and xml string
-        console.log('AGUpdate: Thinks this is the "correct" XML.');
+        // //console.log('AGUpdate: Thinks this is the "correct" XML.');
         sessionStorage.setItem(taskID + "_test_log", c_prev_log);
         sessionStorage.setItem(taskID + "_test_state", curr_xml);
 
@@ -150,19 +167,19 @@ function AGUpdate(snapWorld, taskID) {
 
     } else if (prev_xml && isSameSnapXML(prev_xml, curr_xml, true)) {
        // Restore the AG status bar to a graded state
-        console.log('AGUpdate: Thinks this is just the "last" XML.');
+        // //console.log('AGUpdate: Thinks this is just the "last" XML.');
         outputLog = JSON.parse(prev_log);
         outputLog.savedXML = curr_xml;
         outputLog.snapWorld = snapWorld;
         AG_bar_semigraded(outputLog);
     } else {
-        // console.log("AGUpdate: Button should be ungraded");
+        // // //console.log("AGUpdate: Button should be ungraded");
         // Restore the AG status bar to a graded state
         var numAttempts = setNumAttempts(taskID);
         outputLog = new FeedbackLog(snapWorld, taskID, "", numAttempts);
-        console.log(outputLog);
+        // //console.log(outputLog);
         AG_bar_ungraded(outputLog);
-        console.log("button should change");
+        // //console.log("button should change");
     }
     return outputLog;
 }
@@ -203,10 +220,10 @@ function AGFinish(outputLog) {
 
     outputLog.saveSnapXML(outputLog.taskID + "_test_state");
     if (showFeedback) {
-        populateFeedback(outputLog);
+        //populateFeedback(outputLog);
     }
-    console.log('Autograder test Results:');
-    console.log(outputLog);
+    // //console.log('Autograder test Results:');
+    // //console.log(outputLog);
     if (isEDXurl()) {
         edX_check_button.click();
     }
@@ -214,15 +231,61 @@ function AGFinish(outputLog) {
     // TODO: Extract this into something that can be called externally.
     // AutograderCallbacks.call('onSubmit')
     if (submitAutograderResults) {
-        console.log('SUBMITTING AG RESULTS');
+        // //console.log('SUBMITTING AG RESULTS');
         submitAutograderResults(outputLog);
     }
     if (!isEDXurl()) {
-        populateFeedback(outputLog, false)
+        //console.log('show my feedback pppp');
+        populateFeedback(outputLog, false);
         openResults();
     }
 }
+function AGLittleFinish(outputLog) {
+    var c_prev_log = JSON.parse(
+        sessionStorage.getItem(outputLog.taskID + "_c_test_log")
+    );
 
+    if (!graded) {
+        AG_bar_nograde();
+        return;
+    }
+
+    // Verify correctness
+    if (outputLog.allCorrect) {
+        // Save the correct XML string into sessionStorage
+        AG_bar_graded(outputLog);
+        outputLog.saveSnapXML(outputLog.taskID + "_c_test_state");
+    } else if ((outputLog.pScore > 0) && ((c_prev_log && outputLog.pScore >= c_prev_log.pScore) || (!c_prev_log))) {
+        // TODO: update this
+        // Update AG_status_bar to 'graded, but incorrect' state
+    } else {
+        AG_bar_semigraded(outputLog);
+    }
+    // Save the current XML. Log is saved in gradingLog.scoreLog(...)
+
+    outputLog.saveSnapXML(outputLog.taskID + "_test_state");
+    if (showFeedback) {
+        //populateFeedback(outputLog);
+    }
+    // //console.log('Autograder test Results:');
+    // //console.log(outputLog);
+    if (isEDXurl()) {
+        edX_check_button.click();
+    }
+    // Submission to the autograder site
+    // TODO: Extract this into something that can be called externally.
+    // AutograderCallbacks.call('onSubmit')
+    if (submitAutograderResults) {
+        // //console.log('SUBMITTING AG RESULTS');
+        submitAutograderResults(outputLog);
+    }
+    if (!isEDXurl()) {
+        //console.log('show my feedback qqqq');
+        populateLittleFeedback(outputLog, false);
+        //console.log('show my feedback populateLittleFeedback finished');
+        openResults();
+    }
+}
 /*
  * Reset state removes all saved logs and XML files, and opens a new
  * Snap! file. 
@@ -320,7 +383,7 @@ function revertToLastState(snapWorld, taskID) {
 */
 function isSameSnapXML(prev_xml, curr_xml, no_subset) {
    // replace script coordinates with generic 'x="0" y="0"'
-    // console.log('isSameSnapXML');
+    // // //console.log('isSameSnapXML');
     if ((prev_xml === null) || (curr_xml === null)) { return false; }
    // Remove script coordinates
     // prev_xml = prev_xml.replace(/script x="[\d]*" y="[\d]*"/g, 'script x="0" y="0"');
@@ -406,7 +469,7 @@ function regradeOnClick(outputLog, testId) {
 
     // What about other types of tests?
     outputLog.scoreLog();
-    console.log(outputLog);
+    // //console.log(outputLog);
 }
 
 function setNumAttempts(taskID) {

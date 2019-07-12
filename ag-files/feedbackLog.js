@@ -410,6 +410,7 @@ FeedbackLog.prototype.firstTest = function() {
 };
 
 FeedbackLog.prototype.scoreLog = function() {
+    // console.log('scoreLog');
     if (this.testCount === 0) {
         throw 'FeedbackLog.scoreLog: Attempted to score empty FeedbackLog';
     }
@@ -463,7 +464,61 @@ FeedbackLog.prototype.scoreLog = function() {
     AGFinish(this);
     return this;
 };
+FeedbackLog.prototype.scoreLittleLog = function() {
+    // console.log('scoreLog');
+    if (this.testCount === 0) {
+        throw 'FeedbackLog.scoreLog: Attempted to score empty FeedbackLog';
+    }
 
+    // Iterate over all tests and score the FeedbackLog, chunks, and tips.
+    this.allCorrect = true;
+    this.points = 0;
+    this.numCorrect = 0;
+    var chunk,
+        tip,
+        test;
+    for (var c = 0; c < this.chunk_list.length; c++) { // for each chunk
+        chunk = this.chunk_list[c];
+        chunk.allCorrect = true;
+        chunk.points = 0;
+        chunk.numCorrect = 0;
+        for (var t = 0; t < chunk.tip_list.length; t++) { // for each tip
+            tip = chunk.tip_list[t];
+            tip.allCorrect = true;
+            tip.points = 0;
+            tip.numCorrect = 0;
+            // for (var i in tip.test_list) { // for each test
+            for (var i=0; i < tip.test_list.length; i++) {
+                test = tip.test_list[i];
+                if (test.correct) {    // check if test passed,
+                    tip.numCorrect += 1;    // update count and points
+                    tip.points += test.points;
+                } else {
+                    tip.allCorrect = false;
+                }
+            }
+            tip.graded = true;
+            chunk.numCorrect += tip.numCorrect;
+            chunk.points += tip.points;
+            chunk.allCorrect = chunk.allCorrect && tip.allCorrect
+        }
+        chunk.graded = true;
+        this.numCorrect += chunk.numCorrect;
+        this.points += chunk.points;
+        this.allCorrect = this.allCorrect && chunk.allCorrect;
+    }
+    // Calculate percentage score (for edX partial credit)
+    this.pScore = this.points / this.totalPoints;
+    this.graded = true;
+    this.numAttempts += 1; // increment the number of attempts when grading succeeds.
+    // save the log
+    this.saveLog();
+    // this.SnapWorld = world;
+    // console.log(this);
+    // Update the Autograder Status Bar
+    AGLittleFinish(this);
+    return this;
+};
 /************** Formatting the Feedback Log *****************/
 
 // NOTE: May no longer be necessary

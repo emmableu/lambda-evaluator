@@ -1,4 +1,4 @@
-console.log('fang pi');
+// console.log('fang pi');
 populateFeedback = function(feedbackLog, allFeedback, chunknum, tipnum) {
     // TODO: Declare move variables up here:
     var i, j, x;
@@ -27,7 +27,7 @@ populateFeedback = function(feedbackLog, allFeedback, chunknum, tipnum) {
     var correct_feedbacks = [];
     var incorrect_feedbacks = [];
     for (i = 0; i < chunks.length; i++) {
-        console.log("chunks.length", chunks.length);
+        // console.log("chunks.length", chunks.length);
         var chunk = chunks[i];
 
         var chunkPoints = "";
@@ -59,13 +59,13 @@ populateFeedback = function(feedbackLog, allFeedback, chunknum, tipnum) {
 
         var allFeedback = allFeedback !== undefined ? allFeedback : false;
         var currRank = 1;
-        console.log("tips: ", tips);
+        // console.log("tips: ", tips);
         // tipLoop:
         // TODO: Document this
 
         // for (x = 0; x < tips.length; x++) {
         x = 0;
-        console.log('x', x, 'tips.length', tips.length);
+        // console.log('x', x, 'tips.length', tips.length);
         var tip = tips[x];
         var label_class = "incorrectans";
         var div = document.createElement("div");
@@ -101,7 +101,7 @@ populateFeedback = function(feedbackLog, allFeedback, chunknum, tipnum) {
         );
         j = 0;
         // for (j = 0; j < allTests.length; j++) {
-        // console.log('alltests.length', allTests.length);
+        // // console.log('alltests.length', allTests.length);
         var newRow = document.createElement("tr");
         var thisTest = allTests[j];
         var testPoints = showPoints ? "({0}) ".format(
@@ -326,10 +326,10 @@ populateFeedback = function(feedbackLog, allFeedback, chunknum, tipnum) {
             }
         }
     }
-    console.log('correct_total', correct_total);
-    console.log('incorrect_total', incorrect_total);
-    console.log('correct_feedback', correct_feedbacks);
-    console.log('incorrect_feedback', incorrect_feedbacks);
+    // console.log('correct_total', correct_total);
+    // console.log('incorrect_total', incorrect_total);
+    // console.log('correct_feedback', correct_feedbacks);
+    // console.log('incorrect_feedback', incorrect_feedbacks);
 
 
     stars = document.createElement('div');

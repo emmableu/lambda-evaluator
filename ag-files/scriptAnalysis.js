@@ -211,6 +211,9 @@ function JSONblock(block) {
     if(block.blockSpec === 'set pen color to %clr'){
         var blockColor = (block.children[4].color);
     }
+    if(block.blockSpec === 'touching %clr ?'){
+        var blockColor = block.children[1].color;
+    }
 
     for (var i = 0; i < block.children.length; i++) {
         morph = block.children[i];
