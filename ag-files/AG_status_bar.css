@@ -65,7 +65,7 @@ Control bars and user-facing buttons to interact with the autograder.
 
 .popup-content {
   padding: 20px 30px;
-  width: 50%;
+  width: 40% !important;
   position: relative;
   margin: 5% auto 0;
   background: #fff;
