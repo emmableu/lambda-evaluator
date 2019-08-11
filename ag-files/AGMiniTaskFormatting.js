@@ -109,14 +109,17 @@ function createBlockIamges(blockSpec, hintHTML) {
     TODO: Rename these functions
 */
 function openPopup() {
-    // // console.log("open  popup");
+
     $('#ag-output').removeClass("hidden");
+    // }
     var output = $('#ag-output').attr("class");
     // // console.log("ag-output class: ", output);
 }
 
 function closePopup() {
     // // console.log("please close this!");
+    console.log('Agoutput.closePopup');
+    Trace.log('Agoutput.closePopup');
     try {
         divTest;
         delete divTest;
@@ -330,6 +333,8 @@ var update_listener = function() {
 // Called from "Get Feedback" Button -- begins test execution
 function doExecAndDisplayTests(event) {
     // alert('doexecanddisplay tests');
+    console.log('CheckMyWork.Click');
+    Trace.log('CheckMyWork.Click');
     console.log('------------------------doexecanddisplaytests');
     event.stopPropagation();
     // // // console.log('doMiniExectAnd');
@@ -349,24 +354,37 @@ function doExecAndDisplayTests(event) {
         }
     }
     sessionStorage.setItem(id + "_popupFeedback", '');
-    openPopup();
+    agoutput = document.getElementById("ag-output");
+    if (agoutput.classList.contains('hidden')) {
+        console.log('CheckMyWork.agOutputOpened');
+        Trace.log('CheckMyWork.agOutputOpened');
+        openPopup();
+    }
+    // openPopup();
+
 }
 
 function doExecAndDisplayQuizzes(event){
     event.stopPropagation();
-    console.log('doExecAndDisplayQuizzes');
-    populateQuiz();
-    openPopup();
+    console.log('clicked continue, doExecAndDisplayQuizzes');
+    Trace.log('KnowledgeCheck.clickUpperContinue');
+    agoutput = document.getElementById("ag-output");
+    if (agoutput.classList.contains('hidden')) {
+        Trace.log('KnowledgeCheck.agOutputOpened');
+        populateQuiz();
+        openPopup();
+    }
 }
 
 function doExecAndDisplayLittleTests(){
     // alert('doexecanddisplay little tests');
     event.stopPropagation();
-    // // // console.log('doMiniExectAnd');
-    var numAttempts = setNumAttempts(id);
-    outputLog = new FeedbackLog(world, id, numAttempts);
-    outputLog.numAttempts += 1;
-    runLittleAGTest(world, id, outputLog);
+    if (window.assignmentID[window.assignmentID.length-1] !== '1') {
+        var numAttempts = setNumAttempts(id);
+        outputLog = new FeedbackLog(world, id, numAttempts);
+        outputLog.numAttempts += 1;
+        runLittleAGTest(world, id, outputLog);
+    }
 }
 
 /*
